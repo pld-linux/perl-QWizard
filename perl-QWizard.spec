@@ -5,13 +5,14 @@
 %define		pdir	QWizard
 %include	/usr/lib/rpm/macros.perl
 Summary:	QWizard - Display a series of questions, get the answers, and act on the answers
+Summary(pl.UTF-8):	QWizard - wyświetlanie serii pytań, pobranie odpowiedzi i ich obsługa
 Name:		perl-QWizard
 Version:	3.15
 Release:	1
 # same as perl
 License:	GPL v1+ or Artistic
 Group:		Development/Languages/Perl
-Source0:	http://search.cpan.org/CPAN/authors/id/H/HA/HARDAKER/QWizard-%{version}.tar.gz
+Source0:	http://www.cpan.org/modules/by-module/QWizard/QWizard-%{version}.tar.gz
 # Source0-md5:	e5cf695466d39ad6c7f242ad58b7ad97
 URL:		http://search.cpan.org/dist/QWizard/
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -43,23 +44,28 @@ modification by both graphical window environments (Gtk2 and Tk) and
 HTML-based web environments (e.g., CGI scripts.), as well with
 intercative command line enviornments (ReadLine).
 
-Back-end interfaces (child classes of the QWizard::Generator module)
-are responsible for displaying the information to the user. Currently
-HTML, Gtk2, Tk and ReadLine, are the output mechanisms that work the
-best (in that order). Some others are planned (namely a curses
-version), but are not far along in development. Developing new
-generator back-ends is fairly simple and doesn't take a lot of code
-(assuming the graphic interface is fairly powerful and contains a
-widget library.)
+%description -l pl.UTF-8
+QWizard wyświetla listę pogrupowanych pytań, a następnie pobiera i
+przetwarza odpowiedzi użytkownika. Przed obsługą odpowiedzi może być
+wyświetlonych wiele pytań/odpowiedzi. Po zatwierdzeniu całości (z
+udziałem użytkownika) wykonywana jest seria akcji - w kolejności
+wymaganej przez programistę.
 
-QWizard operates by displaying a series of "screens" to the user. Each
-screen is defined in a QWizard construct called a primary that
-describes the attributes of a given screen, including the list of
-questions to be presented to the user. Primaries can contain
-questions, things to do immediately after the questions are answered
-(post_answers), and things to do once the entire series of screens
-have been answered (actions). Other information, such as a title and
-an introduction, can also be attached to a primary.
+Prawdziwa siła QWizarda polega na możliwości śledzenia informacji o
+stanie między jednym ekranem kreatora a następnym, nawet w zwykle
+bezstanowych środowiskach, takich jak HTTP i HTML. Pozwala to
+programiście zebrać duży zestaw danych z wielu prostych ekranów. Po
+zebraniu wszystkich danych i zweryfikowaniu ich, można je odpowiednio
+obsłużyć (np. zapisać w bazie danych, użyć do konfiguracji systemu
+albo do wygenerowania wykresu).
+
+Aktualnie istniejące interfejsy użytkownika to HTML, Gtk2, Tk oraz
+(minimalnie) ReadLine. Prosta implementacja skryptów QWizarda może
+wykorzystywać dowolny z formatów wyjściowych bez modyfikowania kodu.
+Dzięki temu bardzo łatwo napisać przenośne skrypty kreatorów, które
+można bez żadnej modyfikacji wykorzystywać w środowiskach graficznych
+(Gtk2 i Tk) oraz środowiskach WWW opartych na HTML-u (np. skryptach
+CGI), a także interaktywnych środowiskach tekstowych (ReadLine).
 
 %prep
 %setup -q -n %{pdir}-%{version}
@@ -80,13 +86,19 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -a examples $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
+%{__rm} $RPM_BUILD_ROOT%{perl_vendorlib}/QWizard_Widgets.pod
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
 %doc CHANGES README
-%{perl_vendorlib}/*.pm
-%{perl_vendorlib}/QWizard/
-%{_mandir}/man3/*
+%{perl_vendorlib}/QWizard.pm
+%{perl_vendorlib}/QWizard
+%attr(755,root,root) %{perl_vendorlib}/QWizard_Widgets.pl
+%dir %{perl_vendorlib}/auto/QWizard
+%dir %{perl_vendorlib}/auto/QWizard/Generator
+%{perl_vendorlib}/auto/QWizard/Generator/autosplit.ix
+%{_mandir}/man3/QWizard*.3pm*
 %{_examplesdir}/%{name}-%{version}
