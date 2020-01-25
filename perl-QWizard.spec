@@ -3,7 +3,6 @@
 %bcond_without	tests		# do not perform "make test"
 #
 %define		pdir	QWizard
-%include	/usr/lib/rpm/macros.perl
 Summary:	QWizard - Display a series of questions, get the answers, and act on the answers
 Summary(pl.UTF-8):	QWizard - wyświetlanie serii pytań, pobranie odpowiedzi i ich obsługa
 Name:		perl-QWizard
